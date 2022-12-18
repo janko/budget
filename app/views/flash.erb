@@ -1,0 +1,6 @@
+<% if flash["notice"] %>
+  <div class="alert alert-success" data-turbo-cache="false"><%= flash["notice"] %></div>
+<% end %>
+<% if flash["error"] %>
+  <div class="alert alert-danger" data-turbo-cache="false"><%= flash["error"] %></div>
+<% end %>

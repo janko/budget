@@ -1,0 +1,5 @@
+<% form @new_category, { method: :post, action: categories_path, class: "row row-cols-lg-auto g-3 align-items-center" }, wrapper: :div do |f| %>
+  <%= f.input :name, class: "form-control", placeholder: "New Category...", label: false %>
+  <%= f.input :color, type: :color, class: "form-control-color", label: false %>
+  <%= f.button value: "Create Category", class: "btn btn-primary" %>
+<% end %>

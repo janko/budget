@@ -1,0 +1,29 @@
+<% content_for :title, "Categories" %>
+
+<h2>Categories</h2>
+
+<div class="mt-4">
+  <%= render "categories/new" %>
+</div>
+
+<% if @categories.any? %>
+  <table class="table table-borderless align-middle mt-4 w-25">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Color</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr>
+          <td><%= category.name %></td>
+          <td><span class="badge" style="background-color: <%= category.color %>"><%= category.color %></span></td>
+          <td><%= link_to icon(:trash), path(category), "data-turbo-method": "delete", "data-turbo-confirm": "Are you Sure?", class: "text-danger" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

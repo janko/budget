@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Budget • <%= content_for :title %></title>
+    <meta charset="utf-8">
+    <meta name="csrf-token" content="<%= csrf_token %>">
+
+    <script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="/app.css" rel="stylesheet">
+    <script type="module" src="/app.js"></script>
+  </head>
+
+  <body>
+    <%= render "navbar" %>
+
+    <div class="container">
+      <%= render "flash" %>
+      <%= yield %>
+    </div>
+  </body>
+</html>
