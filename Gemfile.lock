@@ -39,12 +39,16 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
+    i18n (1.12.0)
+      concurrent-ruby (~> 1.0)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    money (6.16.0)
+      i18n (>= 0.6.4, <= 2)
     nio4r (2.5.8)
     pg (1.4.3)
     public_suffix (5.0.0)
@@ -74,17 +78,20 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  arm64-darwin-22
 
 DEPENDENCIES
   concurrent-ruby (~> 1.1)
   dotenv (~> 2.8)
   dry-configurable (~> 0.15.0)
+  dry-inflector (~> 0.3.0)
   dry-initializer (~> 3.1)
   dry-types (~> 1.5)
   erubi (~> 1.11)
   forme (~> 2.2)
   http (~> 5.1)
   listen (~> 3.7)
+  money (~> 6.16)
   pg (~> 1.4)
   puma (~> 5.6)
   rackup (~> 0.2.2)

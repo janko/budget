@@ -26,9 +26,14 @@ end
 desc "Import new transactions into the database"
 task :import => :boot do
   to = Date.today
-  from = Date.new(to.year - 1, to.month, to.day)
+  from = Date.new(to.year - 3, to.month, to.day)
 
-  ImportTransactions.call(from: from, to: to)
+  ImportTransactions.call(from: from, to: to, fio_token: Settings.fio_token_business)
+  ImportTransactions.call(from: from, to: to, fio_token: Settings.fio_token_shared)
+end
+
+task :backup do
+  system "pg_dump", db.opts[:database], out: "tmp/backup-#{Date.today.strftime("%Y%m%d")}.sql"
 end
 
 task :boot do

@@ -5,7 +5,7 @@ require "date"
 class ImportTransactions < ApplicationService
   FIO_API_URL = "https://www.fio.cz/ib_api/rest"
 
-  option :fio_token, Types::String, default: -> { Settings.fio_token }
+  option :fio_token, Types::String
   option :from, Types::Date
   option :to, Types::Date
 

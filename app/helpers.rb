@@ -11,11 +11,26 @@ module Helpers
     date.strftime("%d.%m.%Y")
   end
 
-  def price(value)
-    "#{"%.2f" % value} CZK"
+  def price(value, currency: true)
+    text = Money.from_amount(value).format
+    text.sub!(/,\d{2}/, "") # remove cents
+    text.sub!(" Kč", "") unless currency
+    text
   end
 
   def icon(name)
     render "icons/#{name}"
+  end
+
+  def truncate(text, length: 60)
+    if text.length >= length
+      text[0...length] + "..."
+    else
+      text
+    end
+  end
+
+  def dom_id(record)
+    "#{Inflector.dasherize(Inflector.singularize(record.model.table_name))}-#{record.id}"
   end
 end

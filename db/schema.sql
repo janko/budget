@@ -176,7 +176,7 @@ ALTER TABLE ONLY public.schema_migrations
 --
 
 ALTER TABLE ONLY public.expenses
-    ADD CONSTRAINT expenses_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+    ADD CONSTRAINT expenses_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id) ON DELETE SET NULL;
 
 
 --
@@ -218,6 +218,7 @@ SET row_security = off;
 INSERT INTO public.schema_migrations VALUES ('20221001115823_create_categories.rb');
 INSERT INTO public.schema_migrations VALUES ('20221001115843_create_expenses.rb');
 INSERT INTO public.schema_migrations VALUES ('20221020231423_create_fio_transactions.rb');
+INSERT INTO public.schema_migrations VALUES ('20230114181444_nullify_expense_category_id_on_deletion.rb');
 
 
 --

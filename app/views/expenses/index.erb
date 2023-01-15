@@ -20,20 +20,7 @@
 
     <tbody>
       <% @expenses.each do |expense| %>
-        <tr class="<%= "text-decoration-line-through opacity-50" if expense.ignore %>">
-          <td class="text-end tabular-nums"><%= price(expense.amount) %></td>
-          <td class="ps-3"><%= expense.description %></td>
-          <td class="tabular-nums"><%= date(expense.date) %></td>
-          <td>
-            <% if expense.category %>
-              <span class="badge" style="background-color: <%= expense.category.color %>"><%= expense.category.name %></span>
-            <% end %>
-          </td>
-          <td class="d-flex align-items-center">
-            <%= link_to icon(:trash), path(expense), "data-turbo-method": "delete", "data-turbo-confirm": "Are you Sure?", class: "text-danger" unless expense.fio_transaction_id %>
-            <%= link_to icon(:eye_off), ignore_expense_path(expense), "data-turbo-method": "post", class: "text-muted" if expense.fio_transaction_id %>
-          </td>
-        </tr>
+        <%= partial "expenses/expense", locals: { expense: expense, categories: @categories } %>
       <% end %>
     </tbody>
   </table>

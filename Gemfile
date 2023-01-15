@@ -16,9 +16,12 @@ gem "roda-turbo", "~> 1.0"
 gem "http", "~> 5.1"
 gem "dry-initializer", "~> 3.1"
 gem "dry-types", "~> 1.5"
+gem "dry-inflector", "~> 0.3.0"
 
 gem "zeitwerk", "~> 2.6"
 gem "listen", "~> 3.7"
 gem "dry-configurable", "~> 0.15.0"
 gem "dotenv", "~> 2.8"
 gem "concurrent-ruby", "~> 1.1"
+
+gem "money", "~> 6.16"

@@ -15,5 +15,6 @@ class Settings
 
   setting :database_url, default: ENV.fetch("DATABASE_URL"), reader: true
   setting :secret_key, default: ENV.fetch("SECRET_KEY"), reader: true
-  setting :fio_token, default: ENV.fetch("FIO_TOKEN"), reader: true
+  setting :fio_token_business, default: ENV.fetch("FIO_TOKEN_BUSINESS"), reader: true
+  setting :fio_token_shared, default: ENV.fetch("FIO_TOKEN_SHARED"), reader: true
 end

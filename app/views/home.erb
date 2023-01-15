@@ -1,5 +1,30 @@
 <% content_for :title, "Home" %>
 
-<%== @spending.inspect %>
+<% @spending.group_by { |item| item[:year] }.each do |year, data| %>
+  <h4>Year <%= year %></h4>
 
-<div data-controller="chart"></div>
+  <table class="table tabular-nums mb-4 text-nowrap">
+    <thead>
+      <tr>
+        <th>Month</th>
+        <% @categories.each do |category| %>
+          <th class="text-end"><%= category.name %></th>
+        <% end %>
+        <th class="text-end">Uncategorized</th>
+        <th class="text-end">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.group_by { |item| item[:month] }.each do |month, items| %>
+        <tr>
+          <td><%= Date.new(year, month).strftime("%B") %></td>
+          <% @categories.each do |category| %>
+            <td class="text-end"><%= price items.find { |item| item[:category_id] == category.id }&.fetch(:total) || 0, currency: false %></td>
+          <% end %>
+          <td class="text-end"><%= price items.find { |item| item[:category_id] == nil }&.fetch(:total) || 0, currency: false %></td>
+          <td class="text-end"><strong><%= price items.sum { |item| item.fetch(:total) }, currency: false %></strong></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

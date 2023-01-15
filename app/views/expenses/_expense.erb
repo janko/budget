@@ -1,0 +1,42 @@
+<tr class="<%= "text-decoration-line-through opacity-50" if expense.ignore %>" id="<%= dom_id(expense) %>">
+  <td class="text-end tabular-nums" data-controller="amount">
+    <%# <span data-action="click->amount#edit" data-amount-target="label" type="button"> %>
+      <%= price expense.amount %>
+    <%# </span> %>
+
+    <%# <% form expense, { method: :put, action: path(expense), "data-controller": "form" }, wrapper: :div do |f| %1> %>
+    <%#   <%= f.input :amount, label: false, class: "form-control d-none", attr: { "data-action": "blur->form#submit", "data-amount-target": "input" } %1> %>
+    <%# <% end %1> %>
+  </td>
+  <td class="ps-3"><span title="<%= expense.description %>"><%= truncate expense.description.to_s %></span></td>
+  <td class="tabular-nums"><%= date(expense.date) %></td>
+  <td data-controller="category">
+    <% unless expense.ignore %>
+      <div data-action="click->category#edit" data-category-target="label" type="button">
+        <% if expense.category %>
+          <span class="badge" style="background-color: <%= expense.category.color %>"><%= expense.category.name %></span>
+        <% else %>
+          <span class="badge text-bg-light">Uncategorized</span>
+        <% end %>
+      </div>
+
+      <% form expense, { method: :put, action: path(expense), "data-controller": "form" }, wrapper: :div do |f| %>
+        <%= f.input :category, label: false, class: "form-select d-none",
+          add_blank: "Uncategorized",
+          options: categories.map { |category| [category.name, category.id] },
+          attr: { "data-action": "form#submit", "data-category-target": "input" } %>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="d-flex align-items-center">
+    <%= link_to icon(:trash), path(expense), "data-turbo-method": "delete", "data-turbo-confirm": "Are you Sure?", class: "text-danger" unless expense.fio_transaction_id %>
+    <% if expense.fio_transaction_id %>
+      <% form expense, { method: :put, action: path(expense), "data-controller": "form" }, wrapper: :div do |f| %>
+        <label for="expense-<%= expense.id %>-ignore" class="text-muted" type="button">
+          <%= expense.ignore? ? icon(:eye) : icon(:eye_off) %>
+        </label>
+        <%= f.input :ignore, label: false, class: "d-none", id: "expense-#{expense.id}-ignore", attr: { "data-action": "form#submit" } %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

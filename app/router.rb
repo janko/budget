@@ -4,14 +4,15 @@ class Router < Roda
   include Helpers
 
   plugin :sessions, secret: Settings.secret_key
+  plugin :assets, css: "app.css", js: "app.js", path: Settings.root.join("public"), css_dir: "", js_dir: "", timestamp_paths: true
   plugin :render, views: Settings.root.join("app/views")
+  plugin :partials
   plugin :route_csrf, require_request_specific_tokens: false, check_header: true
   plugin :flash
   plugin :link_to
   plugin :path
   plugin :all_verbs
   plugin :status_303 # for Turbo
-  plugin :public
   plugin :turbo
   plugin :forme_set, secret: Settings.secret_key
   plugin :content_for
@@ -24,12 +25,13 @@ class Router < Roda
   path(Expense) { |expense| "/expenses/#{expense.id}" }
 
   route do |r|
-    r.public
+    r.assets
 
     check_csrf!
 
     r.root do
-      @spending = Category.spent_for_period((Date.today - 30)..Date.today)
+      @spending = Category.monthly_breakdown
+      @categories = Category.order(:name).all
 
       view "home"
     end
@@ -63,6 +65,7 @@ class Router < Roda
       r.get true do
         @expenses = Expense.reverse(:date, :id).eager(:category).all
         @new_expense = Expense.new(date: Expense.last_updated&.date)
+        @categories = Category.order(:name).all
 
         view "expenses/index"
       end
@@ -76,18 +79,17 @@ class Router < Roda
       r.on Integer do |id|
         expense = Expense.with_pk!(id)
 
+        r.put true do
+          forme_set(expense).save
+          categories = Category.order(:name).all
+
+          turbo_stream.replace dom_id(expense), partial("expenses/expense", locals: { expense: expense, categories: categories })
+        end
+
         r.delete true do
           expense.destroy
 
-          r.redirect expenses_path
-        end
-
-        r.post "ignore" do
-          Expense.similar(expense).each do |similar_expense|
-            similar_expense.update(ignore: !expense.ignore)
-          end
-
-          r.redirect expenses_path
+          turbo_stream.remove dom_id(expense)
         end
       end
     end
