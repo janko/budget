@@ -1,7 +1,7 @@
 <% form @new_expense, { method: :post, action: expenses_path, class: "row row-cols-lg-auto g-3 align-items-center" }, wrapper: :div do |f| %>
-  <%= f.input :amount, class: "form-control", placeholder: "CZK", label: false, attr: { inputmode: "numeric", pattern: "-?[0-9.]*" } %>
   <%= f.input :description, class: "form-control", placeholder: "Description...", label: false %>
+  <%= f.input :amount, class: "form-control", placeholder: "CZK", label: false, attr: { inputmode: "numeric", pattern: "-?[0-9.]*" } %>
   <%= f.input :date, label: false, class: "form-control" %>
-  <%= f.input :category, label: false, class: "form-select", add_blank: "Choose Category..." %>
+  <%= f.input :category, label: false, class: "form-select", add_blank: "Choose Category...", options: @categories.map { |category| [category.name, category.id] } %>
   <%= f.button value: "Create Expense", class: "btn btn-primary" %>
 <% end %>

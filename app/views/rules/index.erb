@@ -1,0 +1,42 @@
+<% content_for :title, "Rules" %>
+
+<h2>Rules</h2>
+
+<div class="mt-4">
+  <%= render "rules/new" %>
+</div>
+
+<% if @rules.any? %>
+  <table class="table table-borderless align-middle mt-4 w-50">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Operator</th>
+        <th>Value</th>
+        <th>Action</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @rules.each do |rule| %>
+        <tr>
+          <td><%= rule.field.capitalize %></td>
+          <td><%= rule.operator %></td>
+          <td><%= rule.value %></td>
+          <td>
+            <% if rule.category %>
+              <span class="badge" style="background-color: <%= rule.category.color %>"><%= rule.category.name %></span>
+            <% elsif rule.ignore %>
+              Ignore
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "Apply", apply_rule_path(rule), class: "btn btn-outline-success", "data-turbo-method": "post" %>
+            <%= link_to icon(:trash), path(rule), "data-turbo-method": "delete", "data-turbo-confirm": "Are you Sure?", class: "text-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

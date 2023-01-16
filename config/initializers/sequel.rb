@@ -3,7 +3,7 @@ require "forme"
 
 DB = Sequel.connect(Settings.database_url)
 DB.logger = Settings.logger
-DB.extension :pg_json, :null_dataset
+DB.extension :pg_json, :null_dataset, :pagination
 
 Sequel::Model.cache_associations = false if Settings.env == "development"
 

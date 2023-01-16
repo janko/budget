@@ -3,28 +3,50 @@
 <% @spending.group_by { |item| item[:year] }.each do |year, data| %>
   <h4>Year <%= year %></h4>
 
-  <table class="table tabular-nums mb-4 text-nowrap">
-    <thead>
-      <tr>
-        <th>Month</th>
-        <% @categories.each do |category| %>
-          <th class="text-end"><%= category.name %></th>
-        <% end %>
-        <th class="text-end">Uncategorized</th>
-        <th class="text-end">Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% data.group_by { |item| item[:month] }.each do |month, items| %>
+  <div class="overflow-auto">
+    <table class="table tabular-nums mb-4 text-nowrap">
+      <thead>
         <tr>
-          <td><%= Date.new(year, month).strftime("%B") %></td>
+          <th>Month</th>
           <% @categories.each do |category| %>
-            <td class="text-end"><%= price items.find { |item| item[:category_id] == category.id }&.fetch(:total) || 0, currency: false %></td>
+            <th class="text-end"><%= category.name %></th>
           <% end %>
-          <td class="text-end"><%= price items.find { |item| item[:category_id] == nil }&.fetch(:total) || 0, currency: false %></td>
-          <td class="text-end"><strong><%= price items.sum { |item| item.fetch(:total) }, currency: false %></strong></td>
+          <th class="text-end">Uncategorized</th>
+          <th class="text-end">Total</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% data.group_by { |item| item[:month] }.each do |month, items| %>
+          <tr>
+            <td><%= Date.new(year, month).strftime("%B") %></td>
+            <% @categories.each do |category| %>
+              <td class="text-end"><%= price items.find { |item| item[:category_id] == category.id }&.fetch(:total) || 0, currency: false %></td>
+            <% end %>
+            <td class="text-end"><%= price items.find { |item| item[:category_id] == nil }&.fetch(:total) || 0, currency: false %></td>
+            <td class="text-end"><strong><%= price items.sum { |item| item.fetch(:total) }, currency: false %></strong></td>
+          </tr>
+        <% end %>
+        <tr class="border-top border-4">
+          <td class="fw-semibold">Total</td>
+          <% @categories.each do |category| %>
+            <td class="text-end">
+              <span class="fw-semibold"><%= price data.select { |item| item[:category_id] == category.id }.sum(0) { |item| item[:total] }, currency: false %></span>
+              <br>
+              <small class="text-muted">(<%= price data.select { |item| item[:category_id] == category.id }.sum(0) { |item| item[:total] } / 12, currency: false %>)</small>
+            </td>
+          <% end %>
+          <td class="text-end">
+            <span class="fw-semibold"><%= price data.select { |item| item[:category_id] == nil }.sum(0) { |item| item[:total] }, currency: false %></span>
+            <br>
+            <small class="text-muted">(<%= price data.select { |item| item[:category_id] == nil }.sum(0) { |item| item[:total] } / 12, currency: false %>)</small>
+          </td>
+          <td class="text-end">
+            <strong class="fw-bold"><%= price data.sum { |item| item.fetch(:total) }, currency: false %></strong>
+            <br>
+            <small class="fw-bold text-muted">(<%= price data.sum { |item| item.fetch(:total) } / 12, currency: false %>)</small>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 <% end %>

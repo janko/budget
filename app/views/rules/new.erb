@@ -1,0 +1,8 @@
+<% form @new_rule, { method: :post, action: rules_path, class: "row row-cols-lg-auto g-3 align-items-center" }, wrapper: :div do |f| %>
+  <%= f.input :field, type: :select, class: "form-select", label: false, options: { "Description" => "description" } %>
+  <%= f.input :operator, type: :select, class: "form-select", label: false, options: { "Contains" => "contains" } %>
+  <%= f.input :value, class: "form-control", label: false, placeholder: "Enter text..." %>
+  <%= f.input :category_id, type: :select, class: "form-select", label: false, add_blank: "Set category...", options: @categories.map { |category| [category.name, category.id] } %>
+  <%= f.input :ignore, as: :checkbox, class: "form-check-input", label: "Ignore" %>
+  <%= f.button value: "Create Rule", class: "btn btn-primary" %>
+<% end %>

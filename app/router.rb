@@ -16,6 +16,7 @@ class Router < Roda
   plugin :turbo
   plugin :forme_set, secret: Settings.secret_key
   plugin :content_for
+  plugin :typecast_params
 
   path(:root, "/")
   path(:categories, "/categories")
@@ -23,6 +24,9 @@ class Router < Roda
   path(:expenses, "/expenses")
   path(:ignore_expense) { |expense| "/expenses/#{expense.id}/ignore" }
   path(Expense) { |expense| "/expenses/#{expense.id}" }
+  path(:rules, "/rules")
+  path(:apply_rule) { |rule| "/rules/#{rule.id}/apply" }
+  path(Rule) { |rule| "/rules/#{rule.id}" }
 
   route do |r|
     r.assets
@@ -63,7 +67,7 @@ class Router < Roda
 
     r.on "expenses" do
       r.get true do
-        @expenses = Expense.reverse(:date, :id).eager(:category).all
+        @pagy, @expenses = pagy Expense.reverse(:date, :id).eager(:category)
         @new_expense = Expense.new(date: Expense.last_updated&.date)
         @categories = Category.order(:name).all
 
@@ -72,6 +76,12 @@ class Router < Roda
 
       r.post true do
         expense = forme_set(Expense.new).save
+
+        Rule.order(:id).each do |rule|
+          rule.apply(expense) if rule.matches_expense?(expense)
+        end
+
+        flash["notice"] = "Expense \"#{expense.description}\" created with category \"#{expense.category&.name}\""
 
         r.redirect expenses_path
       end
@@ -93,5 +103,52 @@ class Router < Roda
         end
       end
     end
+
+    r.on "rules" do
+      r.get true do
+        @rules = Rule.order(:id).all
+        @new_rule = Rule.new
+        @categories = Category.order(:name).all
+
+        view "rules/index"
+      end
+
+      r.post true do
+        rule = forme_set(Rule.new).save
+        rule.apply_all
+
+        flash["notice"] = "Rule created and applied"
+
+        r.redirect rules_path
+      end
+
+      r.on Integer do |rule_id|
+        rule = Rule.with_pk!(rule_id)
+
+        r.post "apply" do
+          rule.apply_all
+
+          flash["notice"] = "Rule applied"
+
+          r.redirect rules_path
+        end
+
+        r.delete true do
+          rule.destroy
+
+          r.redirect rules_path
+        end
+      end
+    end
+  end
+
+  private
+
+  def pagy(dataset)
+    tp = typecast_params
+    dataset = dataset.paginate(tp.pos_int("page") || 1, 100)
+    pagy = Pagy.new(count: dataset.pagination_record_count, page: dataset.current_page, items: dataset.page_size)
+
+    [pagy, dataset.all]
   end
 end
