@@ -76,10 +76,7 @@ class Router < Roda
 
       r.post true do
         expense = forme_set(Expense.new).save
-
-        Rule.order(:id).each do |rule|
-          rule.apply(expense) if rule.matches_expense?(expense)
-        end
+        expense.apply_rules(Rule.order(:id).all)
 
         flash["notice"] = "Expense \"#{expense.description}\" created with category \"#{expense.category&.name}\""
 

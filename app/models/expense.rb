@@ -5,4 +5,10 @@ class Expense < Sequel::Model
   def self.last_updated
     reverse(:updated_at).first
   end
+
+  def apply_rules(rules)
+    rules.each do |rule|
+      rule.apply(self) if rule.matches_expense?(self)
+    end
+  end
 end

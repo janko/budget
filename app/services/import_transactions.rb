@@ -24,16 +24,17 @@ class ImportTransactions < ApplicationService
       .where{amount < 0}
       .exclude(expense: Expense.dataset)
 
-    values = new_transactions.map do |transaction|
-      {
-        fio_transaction_id: transaction.id,
+    rules = Rule.order(:id).all
+
+    values = new_transactions.each do |transaction|
+      expense = Expense.create(
+        fio_transaction: transaction,
         description: transaction.message || transaction.note,
         amount: -transaction.amount,
         date: transaction.date,
-      }
+      )
+      expense.apply_rules(rules)
     end
-
-    DB[:expenses].multi_insert(values, commit_every: 1000)
   end
 
   def import_transactions(transactions)

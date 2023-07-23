@@ -25,8 +25,8 @@ end
 
 desc "Import new transactions into the database"
 task :import => :boot do
+  from = Date.new(2023, 1, 1)
   to = Date.today
-  from = Date.new(to.year - 3, to.month, to.day)
 
   ImportTransactions.call(from: from, to: to, fio_token: Settings.fio_token_business)
   ImportTransactions.call(from: from, to: to, fio_token: Settings.fio_token_shared)
