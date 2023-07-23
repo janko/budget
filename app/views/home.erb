@@ -3,6 +3,8 @@
 <% @spending.group_by { |item| item[:year] }.each do |year, data| %>
   <h4>Year <%= year %></h4>
 
+  <% months = year == Date.today.year ? Date.today.mon : 12 %>
+
   <div class="overflow-auto">
     <table class="table tabular-nums mb-4 text-nowrap">
       <thead>
@@ -32,18 +34,18 @@
             <td class="text-end">
               <span class="fw-semibold"><%= price data.select { |item| item[:category_id] == category.id }.sum(0) { |item| item[:total] }, currency: false %></span>
               <br>
-              <small class="text-muted">(<%= price data.select { |item| item[:category_id] == category.id }.sum(0) { |item| item[:total] } / 12, currency: false %>)</small>
+              <small class="text-muted">(<%= price data.select { |item| item[:category_id] == category.id }.sum(0) { |item| item[:total] } / months, currency: false %>)</small>
             </td>
           <% end %>
           <td class="text-end">
             <span class="fw-semibold"><%= price data.select { |item| item[:category_id] == nil }.sum(0) { |item| item[:total] }, currency: false %></span>
             <br>
-            <small class="text-muted">(<%= price data.select { |item| item[:category_id] == nil }.sum(0) { |item| item[:total] } / 12, currency: false %>)</small>
+            <small class="text-muted">(<%= price data.select { |item| item[:category_id] == nil }.sum(0) { |item| item[:total] } / months, currency: false %>)</small>
           </td>
           <td class="text-end">
             <strong class="fw-bold"><%= price data.sum { |item| item.fetch(:total) }, currency: false %></strong>
             <br>
-            <small class="fw-bold text-muted">(<%= price data.sum { |item| item.fetch(:total) } / 12, currency: false %>)</small>
+            <small class="fw-bold text-muted">(<%= price data.sum { |item| item.fetch(:total) } / months, currency: false %>)</small>
           </td>
         </tr>
       </tbody>
