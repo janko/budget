@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "roda", "~> 3.60"
-gem "puma", "~> 5.6"
+gem "puma", "~> 6.4"
 gem "rackup", "~> 0.2.2"
 
 gem "sequel", "~> 5.60"
