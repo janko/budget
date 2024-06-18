@@ -14,6 +14,7 @@ gem "forme", "~> 2.2"
 gem "roda-turbo", "~> 1.0"
 gem "money", "~> 6.16"
 gem "pagy", "~> 6.0"
+gem "bigdecimal", "~> 3.1"
 
 gem "http", "~> 5.1"
 gem "dry-initializer", "~> 3.1"
