@@ -36,6 +36,13 @@ task :backup do
   system "pg_dump", db.opts[:database], out: "tmp/backup-#{Date.today.strftime("%Y%m%d")}.sql"
 end
 
+task :restore do
+  dump = Dir["tmp/backup-*.sql", sort: true].last
+  system "dropdb", db.opts[:database]
+  system "createdb", db.opts[:database]
+  system "psql", db.opts[:database], in: dump
+end
+
 task :boot do
   require_relative "config/boot"
 end
