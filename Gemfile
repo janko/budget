@@ -17,6 +17,7 @@ gem "pagy", "~> 6.0"
 gem "bigdecimal", "~> 3.1"
 
 gem "http", "~> 5.1"
+gem "base64", "~> 0.2.0"
 gem "dry-initializer", "~> 3.1"
 gem "dry-types", "~> 1.5"
 gem "dry-inflector", "~> 0.3.0"
