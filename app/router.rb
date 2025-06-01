@@ -67,7 +67,10 @@ class Router < Roda
 
     r.on "expenses" do
       r.get true do
-        @pagy, @expenses = pagy Expense.reverse(:date, :id).eager(:category)
+        expenses = Expense.dataset
+        expenses = expenses.where(category_id: r.params["category_id"]) if !r.params["category_id"].to_s.empty?
+
+        @pagy, @expenses = pagy expenses.reverse(:date, :id).eager(:category)
         @new_expense = Expense.new(date: Expense.last_updated&.date)
         @categories = Category.order(:name).all
 

@@ -6,6 +6,13 @@
   <%= render "expenses/new" %>
 </div>
 
+<div class="mt-4">
+  <% form({ method: :get, class: "row row-cols-lg-auto g-3 align-items-center" }, wrapper: :div) do |f| %>
+    <%= f.input :select, name: "category_id", value: request.params["category_id"]&.to_i, class: "form-select", add_blank: "No category selected", options: @categories.map { |category| [category.name, category.id] } %>
+    <%= f.button value: "Search", class: "btn btn-success" %>
+  <% end %>
+</div>
+
 <% if @expenses.any? %>
   <table class="table align-middle mt-4">
     <thead>
