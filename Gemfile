@@ -21,6 +21,7 @@ gem "base64", "~> 0.2.0"
 gem "dry-initializer", "~> 3.1"
 gem "dry-types", "~> 1.5"
 gem "dry-inflector", "~> 0.3.0"
+gem "logger"
 
 gem "zeitwerk", "~> 2.6"
 gem "listen", "~> 3.7"
