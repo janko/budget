@@ -7,6 +7,7 @@ gem "rackup", "~> 0.2.2"
 gem "sequel", "~> 5.60"
 gem "pg", "~> 1.4"
 gem "sequel_tools", "~> 0.1.14"
+gem "irb", "~> 1.15"
 
 gem "tilt", "~> 2.0"
 gem "erubi", "~> 1.11"
